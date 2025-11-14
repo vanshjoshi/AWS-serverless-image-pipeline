@@ -1,4 +1,4 @@
 boto3
 Pillow
-
+to download pillow https://serverlessrepo.aws.amazon.com/applications
 
