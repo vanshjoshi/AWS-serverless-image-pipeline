@@ -1,162 +1,153 @@
-🚀 Serverless Image Processing Pipeline (AWS Lambda + S3 + SNS)
+🚀 Serverless Image Processing Pipeline (AWS Lambda • S3 • SNS)
 
-A fully serverless, event-driven image processing system built on AWS.
-When a user uploads an image to an S3 bucket, the system automatically:
-
-✔ Generates 3 resized JPG versions
-✔ Creates a compressed PDF
-✔ Stores all outputs in a separate S3 bucket
-✔ Sends an SNS Notification (SMS/Email) on success or failure
-✔ Works 100% serverless — no servers to manage
-
-This project is perfect for Cloud Engineer / DevOps Engineer portfolios.
+A fully serverless, event-driven image processing pipeline built on AWS. This solution automatically processes images upon upload and delivers optimized outputs with real-time notifications — all without managing any servers.
 
 📌 Architecture Overview
-┌──────────────────┐       ┌───────────────────────────┐
-│  input-bkt-irs    │──────▶│  AWS Lambda Function      │
-│ (Upload Image)    │ S3    │  - Resizes Image          │
-└──────────────────┘ Event  │  - Creates PDF            │
-                            │  - Uploads outputs        │
-                            │  - Sends SNS Notification │
-                            └───────────┬───────────────┘
-                                        │
-                        ┌───────────────▼────────────────┐
-                        │     output-bkt-irs (S3)         │
-                        │  small, medium, large JPGs      │
-                        │  compressed PDF                 │
-                        └─────────────────────────────────┘
-                                        │
-                        ┌───────────────▼────────────────┐
-                        │            SNS Topic            │
-                        │  SMS/Email on Success/Failure   │
-                        └─────────────────────────────────┘
+
+Workflow:
+
+A user uploads an image to the input S3 bucket.
+
+An S3 event trigger invokes the AWS Lambda function.
+
+Lambda performs:
+
+Image resizing (three sizes: small, medium, large)
+
+PDF generation (compressed)
+
+Upload of output files to a destination S3 bucket
+
+SNS notification for success or failure
+
+SNS sends an SMS or email alert.
+
+Components:
+
+S3 (input-bkt-irs) – Source bucket for image uploads
+
+AWS Lambda – Image processing logic
+
+S3 (output-bkt-irs) – Stores resized JPGs and compressed PDF
+
+SNS Topic – Sends processing status notifications
 
 ✨ Features
-🖼 Advanced Image Processing
+🖼 Intelligent Image Processing
 
-Resize image into:
+Automatically generates optimized JPG versions:
 
-300x300 (small)
+300×300px — Small
 
-600x600 (medium)
+600×600px — Medium
 
-1200x1200 (large)
+1200×1200px — Large
 
 📄 PDF Generation
 
-Converts original image into high-quality PDF
+Converts the original image into a compressed, high-quality PDF
 
-Compressed for low storage cost
+Reduces storage cost while maintaining clarity
 
-🔔 Notification System
+🔔 Notification System (SNS)
 
-Sends SMS/email via SNS Topic
+Sends SMS/Email alerts
 
-Includes success or failure details
+Includes success or detailed failure information
 
-🧱 Fully Serverless
+🧱 Fully Serverless Architecture
 
-No EC2 instances
+100% event-driven
 
-Fully event-driven via S3 triggers
+Auto-scaling
 
-Automatic scaling
+No EC2 instances or manual provisioning required
 
-📈 Production Ready
+📈 Production-Ready Build
 
-Logging
+Structured logging
 
-Error handling
+Robust error handling
 
-Scalable design
+Principle of Least Privilege (IAM)
 
-IAM permissions best practices
+Highly scalable and extendable
 
-🧩 Repository Structure
+📁 Repository Structure
 serverless-image-pipeline/
 │
 ├── lambda/
-│   ├── handler.py           # Main Lambda code
-│   └── requirements.txt     # Python dependencies
+│   ├── handler.py            # Main AWS Lambda function
+│   └── requirements.txt      # Python dependencies (e.g., Pillow)
 │
 ├── .gitignore
 ├── LICENSE
 └── README.md
 
-🛠 AWS Setup Instructions
-1️⃣ Create S3 buckets
+🛠 Deployment Guide
+1️⃣ Create S3 Buckets
+
 input-bkt-irs
+
 output-bkt-irs
 
 2️⃣ Create SNS Topic
 
-Name example:
+Name example: image-processing-status
 
-image-processing-status
+Subscribe email or phone to receive notifications.
 
+3️⃣ Create AWS Lambda Function
 
-Subscribe your phone/email to get notifications.
+Runtime: Python 3.12
 
-3️⃣ Create Lambda Function
+Memory: 1024 MB
 
-Runtime → Python 3.12
+Timeout: 180 seconds
 
-Memory → 1024 MB
+Layers: Attach PillowLayerPython313
 
-Timeout → 180 seconds
-
-Attach Pillow Layer → PillowLayerPython313
-
-Add environment variables:
+Environment Variables:
 
 Key	Value
 OUTPUT_BUCKET	output-bkt-irs
-SNS_TOPIC_ARN	arn:aws:sns:<region>:<account-id>:image-processing-status
-🔐 IAM Permissions Required
+SNS_TOPIC_ARN	arn:aws:sns:::image-processing-status
+🔐 IAM Role Requirements
 
-Attach these to the Lambda execution role:
+Attach to Lambda execution role:
 
 AWSLambdaBasicExecutionRole
 
-AmazonS3FullAccess (or restricted S3 policy)
+AmazonS3FullAccess (or a restricted S3 policy)
 
 AmazonSNSFullAccess
 
-🔔 Add S3 Trigger
-
-Go to Lambda → Add Trigger:
+4️⃣ Add S3 Trigger
 
 Service: S3
 
 Bucket: input-bkt-irs
 
-Event Type: PUT
+Event Type: PUT (Object Created)
 
 Enable Trigger
 
-💻 Lambda Code (Already Included)
+🧪 Testing the Pipeline
 
-Located in:
-
-lambda/handler.py
-
-🧪 Testing
-
-Upload any .jpg or .png file to:
+Upload a .jpg or .png file to:
 
 input-bkt-irs
 
-
 Expected outputs in output-bkt-irs:
 
-photo_small.jpg
-photo_medium.jpg
-photo_large.jpg
-photo.pdf
+image_small.jpg
 
+image_medium.jpg
+
+image_large.jpg
+
+image.pdf (compressed)
 
 Expected SNS Notification:
-
-SUCCESS: yourfile.jpg processed.
-Generated: small, medium, large JPG + PDF
-
+SUCCESS: yourfile.jpg processed successfully.
+Generated: small, medium, large JPGs + compressed PDF
