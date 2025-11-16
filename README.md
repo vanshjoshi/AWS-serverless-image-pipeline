@@ -77,11 +77,16 @@ Highly scalable and extendable
 serverless-image-pipeline/
 │
 ├── lambda/
+|
 │   ├── handler.py            # Main AWS Lambda function
+|
 │   └── requirements.txt      # Python dependencies (e.g., Pillow)
+|
 │
 ├── .gitignore
+|
 ├── LICENSE
+|
 └── README.md
 
 🛠 Deployment Guide
