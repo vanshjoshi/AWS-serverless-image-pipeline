@@ -2,6 +2,9 @@
 
 A fully serverless, event-driven image processing pipeline built on AWS. This solution automatically processes images upon upload and delivers optimized outputs with real-time notifications — all without managing any servers.
 
+In this video, you'll learn the exact steps needed to run this project successfully
+https://www.youtube.com/watch?v=cSz3Ei7Kg7U
+
 📌 Architecture Overview
 
 Workflow:
@@ -150,3 +153,5 @@ image.pdf (compressed)
 Expected SNS Notification:
 SUCCESS: yourfile.jpg processed successfully.
 Generated: small, medium, large JPGs + compressed PDF
+
+you can watch this video and follow all the steps: https://www.youtube.com/watch?v=cSz3Ei7Kg7U
